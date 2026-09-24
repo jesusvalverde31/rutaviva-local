@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="RutaViva: rutas peatonales orientativas con riesgo y accesibilidad explicables.">
+  <title>RutaViva · caminar con más contexto</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/engine.js" defer></script>
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="RutaViva, inicio"><span>RV</span><strong>RutaViva</strong></a>
+    <nav aria-label="Principal"><a href="#ruta">Ruta</a><a href="#avisos">Avisos</a><a href="#red">Red</a><a href="#historial">Historial</a></nav>
+    <span class="local">● 100% local</span>
+  </header>
+
+  <main id="contenido">
+    <section class="hero" id="inicio">
+      <div><p class="eyebrow">Inteligencia vecinal · Datos locales</p><h1>Camina con <em>más contexto</em>.</h1><p>Compara recorridos con un índice orientativo que explica distancia, incidencias, iluminación y accesibilidad.</p><p class="warning">RutaViva no garantiza la seguridad ni sustituye indicaciones oficiales. Comprueba siempre el entorno real.</p></div>
+      <div class="hero-orbit" aria-hidden="true"><span>Rutas</span><b>100</b><small>índice orientativo</small></div>
+    </section>
+
+    <div id="status" class="status loading" role="status" aria-live="polite">Cargando la red local…</div>
+
+    <section class="kpis" aria-label="Resumen">
+      <article><span>Zonas</span><strong id="kpi-zonas">—</strong><small>áreas modeladas</small></article>
+      <article><span>Puntos</span><strong id="kpi-puntos">—</strong><small>nodos peatonales</small></article>
+      <article><span>Avisos abiertos</span><strong id="kpi-abiertas">—</strong><small>requieren contexto</small></article>
+      <article class="accent"><span>Alertas críticas</span><strong id="kpi-alertas">—</strong><small>prioridad alta</small></article>
+    </section>
+
+    <section class="panel route-grid" id="ruta">
+      <div class="section-head"><div><p class="eyebrow">Planificador explicable</p><h2>Encuentra una ruta</h2></div><span class="pill">Cálculo en este equipo</span></div>
+      <form id="route-form" class="route-form">
+        <label>Origen<select name="origenId" id="route-origin" required></select></label>
+        <button class="swap" type="button" id="swap-route" aria-label="Intercambiar origen y destino">⇄</button>
+        <label>Destino<select name="destinoId" id="route-destination" required></select></label>
+        <label>Perfil<select name="perfil"><option value="equilibrada">Equilibrado</option><option value="accesible">Priorizar accesibilidad</option></select></label>
+        <button class="primary" type="submit">Calcular ruta</button>
+      </form>
+      <div class="map-wrap"><canvas id="network-map" width="920" height="440" aria-label="Plano de la red peatonal; la tabla posterior ofrece la misma información"></canvas><div class="legend"><span><i class="safe"></i>Ruta sugerida</span><span><i></i>Red disponible</span><span><i class="risk"></i>Incidencia</span></div></div>
+      <aside id="route-result" class="route-result"><p class="empty">Elige origen y destino para comparar el recorrido.</p></aside>
+      <div class="table-scroll"><table><caption>Equivalente textual de la ruta calculada</caption><thead><tr><th>Paso</th><th>Desde</th><th>Hasta</th><th>Distancia</th><th>Condiciones</th></tr></thead><tbody id="route-table"><tr><td colspan="5">Sin ruta calculada.</td></tr></tbody></table></div>
+    </section>
+
+    <section class="panel" id="avisos">
+      <div class="section-head"><div><p class="eyebrow">Señales de la comunidad</p><h2>Avisos e incidencias</h2></div><button class="primary" type="button" data-open-dialog="incident-dialog">+ Nuevo aviso</button></div>
+      <form id="filters" class="filters" role="search">
+        <label>Buscar<input type="search" name="q" placeholder="Título, tipo o detalle"></label>
+        <label>Zona<select name="zonaId" id="filter-zone"><option value="">Todas</option></select></label>
+        <label>Estado<select name="estado"><option value="">Todos</option><option value="abierta">Abierta</option><option value="resuelta">Resuelta</option></select></label>
+        <label>Tipo<select name="tipo"><option value="">Todos</option><option value="obstaculo">Obstáculo</option><option value="cruce">Cruce</option><option value="pavimento">Pavimento</option><option value="iluminacion">Iluminación</option><option value="accesibilidad">Accesibilidad</option><option value="otro">Otro</option></select></label>
+        <button type="reset" class="ghost">Limpiar</button>
+      </form>
+      <p id="filter-summary" class="summary"></p><div id="incident-list" class="cards"></div>
+    </section>
+
+    <section class="split" id="red">
+      <section class="panel"><div class="section-head"><div><p class="eyebrow">Lectura territorial</p><h2>Riesgo por zona</h2></div></div><canvas id="risk-chart" width="620" height="300" aria-label="Gráfico de riesgo acumulado por zona; la tabla ofrece los mismos datos"></canvas><div class="table-scroll"><table><caption>Datos del gráfico por zona</caption><thead><tr><th>Zona</th><th>Abiertas</th><th>Riesgo</th></tr></thead><tbody id="risk-table"></tbody></table></div></section>
+      <section class="panel"><div class="section-head"><div><p class="eyebrow">Red editable</p><h2>Gestionar datos</h2></div></div><div class="manage-actions"><button type="button" data-open-dialog="zone-dialog">Zona</button><button type="button" data-open-dialog="point-dialog">Punto</button><button type="button" data-open-dialog="segment-dialog">Tramo</button><button type="button" data-open-dialog="favorite-dialog">Ruta favorita</button></div><div id="manage-list" class="manage-list"></div></section>
+    </section>
+
+    <section class="panel" id="historial"><div class="section-head"><div><p class="eyebrow">Trazabilidad local</p><h2>Movimientos recientes</h2></div><span class="pill">Solo lectura</span></div><ol id="history-list" class="timeline"></ol></section>
+  </main>
+
+  <dialog id="incident-dialog"><form method="dialog" class="dialog-form" id="incident-form"><div class="dialog-head"><h2>Guardar aviso</h2><button type="button" data-close-dialog aria-label="Cerrar">×</button></div><input type="hidden" name="id"><label>Tramo<select name="tramoId" id="incident-segment" required></select></label><label>Título<input name="titulo" maxlength="100" required></label><label>Descripción<textarea name="descripcion" maxlength="500" rows="3"></textarea></label><div class="two"><label>Tipo<select name="tipo"><option value="obstaculo">Obstáculo</option><option value="cruce">Cruce</option><option value="pavimento">Pavimento</option><option value="iluminacion">Iluminación</option><option value="accesibilidad">Accesibilidad</option><option value="otro">Otro</option></select></label><label>Severidad<select name="severidad"><option value="1">1 · leve</option><option value="2">2</option><option value="3">3 · media</option><option value="4">4</option><option value="5">5 · crítica</option></select></label></div><button class="primary" value="default">Guardar aviso</button></form></dialog>
+  <dialog id="zone-dialog"><form method="dialog" class="dialog-form entity-form" data-kind="zonas"><div class="dialog-head"><h2>Guardar zona</h2><button type="button" data-close-dialog aria-label="Cerrar">×</button></div><input type="hidden" name="id"><label>Nombre<input name="nombre" maxlength="80" required></label><label>Descripción<textarea name="descripcion" maxlength="240"></textarea></label><button class="primary" value="default">Guardar</button></form></dialog>
+  <dialog id="point-dialog"><form method="dialog" class="dialog-form entity-form" data-kind="puntos"><div class="dialog-head"><h2>Guardar punto</h2><button type="button" data-close-dialog aria-label="Cerrar">×</button></div><input type="hidden" name="id"><label>Zona<select name="zonaId" id="point-zone" required></select></label><label>Nombre<input name="nombre" maxlength="80" required></label><div class="two"><label>Tipo<select name="tipo"><option value="cruce">Cruce</option><option value="origen">Origen</option><option value="servicio">Servicio</option><option value="destino">Destino</option></select></label><label>Coordenada X<input type="number" name="x" min="0" max="100" required></label></div><label>Coordenada Y<input type="number" name="y" min="0" max="100" required></label><button class="primary" value="default">Guardar</button></form></dialog>
+  <dialog id="segment-dialog"><form method="dialog" class="dialog-form entity-form" data-kind="tramos"><div class="dialog-head"><h2>Guardar tramo</h2><button type="button" data-close-dialog aria-label="Cerrar">×</button></div><input type="hidden" name="id"><div class="two"><label>Desde<select name="desdeId" id="segment-from" required></select></label><label>Hasta<select name="hastaId" id="segment-to" required></select></label></div><label>Distancia (m)<input type="number" name="distanciaM" min="1" max="100000" required></label><label>Iluminación<select name="iluminacion"><option value="alta">Alta</option><option value="media">Media</option><option value="baja">Baja</option></select></label><label class="check"><input type="checkbox" name="accesible"> Accesible</label><label class="check"><input type="checkbox" name="bidireccional" checked> Bidireccional</label><button class="primary" value="default">Guardar</button></form></dialog>
+  <dialog id="favorite-dialog"><form method="dialog" class="dialog-form entity-form" data-kind="rutas"><div class="dialog-head"><h2>Guardar ruta favorita</h2><button type="button" data-close-dialog aria-label="Cerrar">×</button></div><input type="hidden" name="id"><label>Nombre<input name="nombre" maxlength="80" required></label><div class="two"><label>Origen<select name="origenId" id="favorite-origin" required></select></label><label>Destino<select name="destinoId" id="favorite-destination" required></select></label></div><label>Perfil<select name="perfil"><option value="equilibrada">Equilibrado</option><option value="accesible">Accesible</option></select></label><button class="primary" value="default">Guardar</button></form></dialog>
+</body>
+</html>
