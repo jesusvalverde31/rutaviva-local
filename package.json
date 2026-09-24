@@ -1,0 +1,12 @@
+{
+  "name": "rutaviva-local",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Planificador peatonal local con riesgo y accesibilidad explicables.",
+  "scripts": {
+    "start": "node iniciar.cjs",
+    "check": "node --check server.cjs && node --check storage.cjs && node --check engine.js && node --check iniciar.cjs && node --check public/app.js && node --check public/engine.js",
+    "test": "node --test --test-isolation=none test/server.test.cjs"
+  },
+  "engines": { "node": ">=24" }
+}

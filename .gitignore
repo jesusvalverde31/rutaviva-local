@@ -1,0 +1,28 @@
+# Datos generados en el equipo
+data/
+*.backup.json
+*.corrupt-*
+*.tmp
+
+# Informes internos de Fábrica IA
+AGENTS.md
+BRIEF.md
+TAREAS.md
+VERIFICACION.md
+ABRIR-*-LOCAL.cmd
+
+# Temporales y dependencias accidentales
+test/.tmp/
+node_modules/
+
+# Editores y sistema operativo
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*** Add File: M:/PROYECTO WEB ENTORNO DE TRABAJO/Codex/2026-09-16/ne/outputs/fabrica-ia/proyectos/rutaviva-local/ABRIR-RUTAVIVA.cmd
+@echo off
+setlocal
+cd /d "%~dp0"
+node iniciar.cjs
+if errorlevel 1 pause
