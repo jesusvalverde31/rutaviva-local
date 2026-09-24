@@ -63,3 +63,9 @@ RutaViva is a privacy-first local walking route planner. It turns community repo
 - **34–44 s:** recalcular y mostrar el cambio automático al recorrido alternativo.
 - **44–52 s:** resolver la incidencia y enseñar su movimiento en el historial.
 - **52–60 s:** filtros, vista móvil y cierre: “explicable, accesible, privado; sin mapas externos”.
+
+## Copyright
+
+Copyright © 2026 Jesús Valverde. All rights reserved. This source code
+is public for portfolio review; no open-source license is granted.
+See `LICENSE`.
